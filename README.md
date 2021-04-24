@@ -440,7 +440,7 @@ cdk8s is just being in beta version, you should consider to use it for productio
   <span> · </span>
   <a href="https://github.com/vumdao/">Github</a>
   <span> · </span>
-  <a href="https://stackoverflow.com/users/11430272/vumdao">Web</a>
+  <a href="https://stackoverflow.com/users/11430272/vumdao">stackoverflow</a>
   <span> · </span>
   <a href="https://www.linkedin.com/in/vu-dao-9280ab43/">Linkedin</a>
   <span> · </span>
