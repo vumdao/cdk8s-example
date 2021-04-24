@@ -50,7 +50,7 @@ Initializing a project from the python-app template
 ```
 
 ### 🚀 **[Create cluster IP deployment and target port service](#-Create-cluster-IP-deployment-and-target-port-service)**
-- clusterIp.py
+- https://github.com/vumdao/cdk8s-example/blob/master/clusterip.py
 
 ```
 from constructs import Construct
@@ -102,7 +102,7 @@ class ClusterIp(Construct):
         )
 ```
 
-- main.py
+- https://github.com/vumdao/cdk8s-example/blob/master/main.py
 
 ```
 #!/usr/bin/env python
@@ -438,7 +438,7 @@ cdk8s is just being in beta version, you should consider to use it for productio
 <h3 align="center">
   <a href="https://dev.to/vumdao">:stars: Blog</a>
   <span> · </span>
-  <a href="https://github.com/vumdao/">Github</a>
+  <a href="https://github.com/vumdao/cdk8s-example">Github</a>
   <span> · </span>
   <a href="https://stackoverflow.com/users/11430272/vumdao">stackoverflow</a>
   <span> · </span>
