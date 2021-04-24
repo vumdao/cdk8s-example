@@ -1,0 +1,33 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  labels:
+    app: doc-clean
+  name: doc-clean
+spec:
+  jobTemplate:
+    metadata:
+      name: doc-clean
+    spec:
+      template:
+        metadata:
+          name: doc-clean
+        spec:
+          containers:
+            - args:
+                - /bin/sh
+                - -c
+                - find /opt/Documents/Viewer/cache -type d -mtime +6 -exec rm -r
+                  {} \;; find /opt/Documents/Viewer -type f -mtime +6 -exec rm
+                  {} \;
+              image: busybox
+              name: doc-clean
+              volumeMounts:
+                - mountPath: /opt/Documents
+                  name: efs
+          restartPolicy: OnFailure
+          volumes:
+            - name: efs
+              persistentVolumeClaim:
+                claimName: efs-pvc
+  schedule: 0 1 * * SAT

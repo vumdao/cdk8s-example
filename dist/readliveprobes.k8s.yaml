@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - kube1
+      containers:
+        - image: katacoda/docker-http-server:health
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+          name: frontend
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 3000Mi
+            requests:
+              cpu: 200m
+              memory: 300Mi
+      tolerations:
+        - effect: NoSchedule
+          key: fe
+          operator: Equal
+          value: healthy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bad-frontend
+  name: bad-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bad-frontend
+  template:
+    metadata:
+      labels:
+        app: bad-frontend
+    spec:
+      affinity: {}
+      containers:
+        - image: katacoda/docker-http-server:unhealthy
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+          name: bad-frontend
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 3000Mi
+            requests:
+              cpu: 200m
+              memory: 300Mi
+      tolerations:
+        - {}

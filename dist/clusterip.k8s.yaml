@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wappip
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wappip
+  template:
+    metadata:
+      labels:
+        app: wappip
+      name: wappip
+    spec:
+      containers:
+        - image: katacoda/docker-http-server:latest
+          name: wappip
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wappip
+spec:
+  ports:
+    - name: "80"
+      nodePort: 30080
+      port: 80
+  selector:
+    app: wappip
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wappip-targetport
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 80
+  selector:
+    app: wappip

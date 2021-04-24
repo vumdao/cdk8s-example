@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: msql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ss: msql
+  serviceName: msql
+  template:
+    metadata:
+      labels:
+        ss: msql
+      name: msql
+    spec:
+      containers:
+        - env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: yourpassword
+            - name: MYSQL_USER
+              value: wp_user
+            - name: MYSQL_PASSWORD
+              value: wp_pass
+            - name: MYSQL_DATABASE
+              value: wp_db
+          image: openshift/mysql-55-centos7
+          name: msql
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql/data
+              name: mysql-persistent-storage
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-persistent-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-0001
+spec:
+  accessModes:
+    - ReadWriteOnce
+    - ReadWriteMany
+  capacity:
+    storage: 2Gi
+  nfs:
+    path: /exports/data-0001
+    server: 192.168.121.210
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-0002
+spec:
+  accessModes:
+    - ReadWriteOnce
+    - ReadWriteMany
+  capacity:
+    storage: 5Gi
+  nfs:
+    path: /exports/data-0002
+    server: 192.168.121.210
+  persistentVolumeReclaimPolicy: Retain
